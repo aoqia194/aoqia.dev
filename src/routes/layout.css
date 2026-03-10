@@ -68,6 +68,7 @@ body {
     /* transition: opacity 0.05s; */
 }
 .osd-play.hidden, .osd-pause.hidden {
+    /* opacity: 0; */
     display: none;
 }
 
@@ -93,10 +94,16 @@ body {
     letter-spacing: 0.04em;
 }
 
+.osd-icon {
+    position: relative;
+    width: auto;
+    height: 50%;
+}
+
 .text-glow {
     color: var(--osd-colour);
     /* font-size: clamp(1.5rem, 3.5vw, 2.5rem); */
-    font-size: clamp(1.5rem, 3.5vw, 4.5rem);
+    font-size: clamp(1.5rem, 3.5vw, 3.5rem);
     /* text-shadow:
         0 0 8px rgba(255, 255, 255, 0.9),
         1px 0 rgba(255, 0, 0, 0.5),
