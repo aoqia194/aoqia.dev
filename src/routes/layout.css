@@ -11,7 +11,6 @@ body {
 }
 
 .root {
-    position: relative;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
@@ -20,13 +19,10 @@ body {
     --osd-colour: #ffffff;
 }
 
-/* .scene {
-    position: absolute;
-    inset: 0;
-} */
-
 .scene {
     filter: url(#ChromaticAberration);
+    /* position: relative;
+    width: 100%; */
 }
 
 #filterbank {
@@ -40,27 +36,30 @@ body {
 
 /* VHS OSD OVERLAY */
 
+.osd-container {
+    position: relative;
+    pointer-events: none;
+    z-index: 100;
+}
+
 .osd {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 100;
     font-family: "VT323", monospace !important;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     padding: clamp(10px, 2vh, 24px) clamp(12px, 2.5vw, 28px);
 }
 
 .osd-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    /* align-items: flex-start; */
 }
 
 /* PLAY and PAUSE (with blinking) */
 .osd-play, .osd-pause {
-    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
     /* color: #fff;
     text-shadow:
         0 0 8px rgba(255, 255, 255, 0.9),
@@ -74,7 +73,6 @@ body {
 
 .osd-ch {
     margin-left: auto;
-    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
     /* color: #00eeff;
     text-shadow: 0 0 10px rgba(0, 238, 255, 0.85); */
     /* color: #ffffff; */
@@ -83,7 +81,6 @@ body {
 
 .osd-sp {
     margin-left: auto;
-    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
     /* color: #ffee00;
     text-shadow: 0 0 9px rgba(255, 238, 0, 0.8); */
     /* color: #ffffff; */
@@ -92,13 +89,14 @@ body {
 
 .osd-time {
     margin-left: auto;
-    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
     /* color: #fff; */
     letter-spacing: 0.04em;
 }
 
 .text-glow {
     color: var(--osd-colour);
+    /* font-size: clamp(1.5rem, 3.5vw, 2.5rem); */
+    font-size: clamp(1.5rem, 3.5vw, 4.5rem);
     /* text-shadow:
         0 0 8px rgba(255, 255, 255, 0.9),
         1px 0 rgba(255, 0, 0, 0.5),

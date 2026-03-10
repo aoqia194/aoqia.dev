@@ -28,6 +28,7 @@
   import video_EXPLORERS from "$lib/assets/video/EXPLORERS.mp4";
   import video_LOVEISANOCEAN from "$lib/assets/video/LOVEISANOCEAN.mp4";
   import video_WAVE from "$lib/assets/video/WAVE.mp4";
+
   const musicVideos = [
     ["EXPLORERS.MP4", video_EXPLORERS],
     ["LOVEISANOCEAN.MP4", video_LOVEISANOCEAN],
@@ -71,7 +72,21 @@
   let currentVideoTime: number = $state(0);
   let currentVideoEnded: boolean = $state(false);
   let currentVideoMuted: boolean = $state(true);
+
+  // Position OSD in the bounds of the video (inside of the letterbox)
+
+  import { positionOSD } from "$lib/components/VideoBoundsCalc.svelte";
+
+  function onloadedmetadata(event: any) {
+    positionOSD(videoElement);
+  }
+
+  function onresize(event: any) {
+    positionOSD(videoElement);
+  }
 </script>
+
+<svelte:window {onresize} />
 
 <svelte:head>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Bebas+Neue&display=swap" rel="stylesheet" />
@@ -119,37 +134,41 @@
 <div class="root">
   <div class="scene">
     <video autoplay controls controlslist="nodownload nofullscreen noplaybackrate" disablepictureinpicture playsinline
+      {onloadedmetadata}
       bind:this={videoElement}
       bind:paused={isVideoPaused}
       bind:currentTime={currentVideoTime}
       bind:ended={currentVideoEnded}
-      bind:muted={currentVideoMuted}>
+      bind:muted={currentVideoMuted}
+    >
       <source src={selectedMusicVideo[1]} type="video/mp4" />
       Your browser does not support loading the video.
     </video>
 
-    <div class="osd">
-      <div class="osd-row">
-        <span class="osd-play text-glow" class:hidden={!isVideoPlaying || !playBlink}>
-          <img src={playIcon} alt="" />
-          &nbsp;PLAY
-        </span>
-        <span class="osd-pause text-glow" class:hidden={isVideoPlaying || !playBlink}>
-          <img src={pauseIcon} alt="" />
-          &nbsp;PAUSE
-        </span>
-        <!-- <span class="osd-ch">CH&nbsp;&thinsp;01</span> -->
-        <span class="osd-ch text-glow">{selectedMusicVideo[0]}</span>
-      </div>
+    <div class="osd-container">
+      <div class="osd">
+        <div class="osd-row">
+          <span class="osd-play text-glow" class:hidden={!isVideoPlaying || !playBlink}>
+            <img src={playIcon} alt="" />
+            &nbsp;PLAY
+          </span>
+          <span class="osd-pause text-glow" class:hidden={isVideoPlaying || !playBlink}>
+            <img src={pauseIcon} alt="" />
+            &nbsp;PAUSE
+          </span>
+          <!-- <span class="osd-ch">CH&nbsp;&thinsp;01</span> -->
+          <span class="osd-ch text-glow">{selectedMusicVideo[0]}</span>
+        </div>
 
-      <div class="osd-row">
-        <span class="osd-time text-glow">
-          <RollingTimer {currentVideoTime} />
-        </span>
-      </div>
+        <div class="osd-row">
+          <span class="osd-time text-glow">
+            <RollingTimer {currentVideoTime} />
+          </span>
+        </div>
 
-      <div class="osd-row">
-        <span class="osd-sp text-glow">SP</span>
+        <div class="osd-row">
+          <span class="osd-sp text-glow">SP</span>
+        </div>
       </div>
     </div>
   </div>
