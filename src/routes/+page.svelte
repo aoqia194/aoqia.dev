@@ -1,9 +1,17 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  // Icons
+  import playIcon from "$lib/assets/icons/play.svg";
+  import pauseIcon from "$lib/assets/icons/pause.svg";
+
+  // Components
+  import RollingTimer from "$lib/components/RollingTimer.svelte";
+  import { createOneShot } from "$lib/components/OneShot.svelte";
+
   let playBlink = $state(true);
   onMount(() => {
-    // Blink ▶ PLAY indicator
+    // Blink PLAY/PAUSE indicator
     const blinkTimeout = setInterval(() => {
       playBlink = !playBlink;
     }, 1000);
@@ -13,42 +21,45 @@
     };
   });
 
-  // Video selection and importing
-  import { resolve } from "$app/paths";
+  // Video selection and rotation
 
-  let musicVideos = [
-    // @ts-ignore
-    resolve("/src/lib/assets/video/EXPLORERS.MP4"),
-    // @ts-ignore
-    resolve("/src/lib/assets/video/WAVE.MP4"),
-    // @ts-ignore
-    resolve("/src/lib/assets/video/LOVEISANOCEAN.MP4"),
+  import video_EXPLORERS from "$lib/assets/video/EXPLORERS.mp4";
+  import video_LOVEISANOCEAN from "$lib/assets/video/LOVEISANOCEAN.mp4";
+  import video_WAVE from "$lib/assets/video/WAVE.mp4";
+  const musicVideos = [
+    video_EXPLORERS,
+    video_LOVEISANOCEAN,
+    video_WAVE,
   ];
-  let selectedMusicVideo = musicVideos[Math.floor(Math.random() * musicVideos.length)];
+  let musicVideoId = Math.floor(Math.random() * musicVideos.length);
+  let selectedMusicVideo = $state(musicVideos[musicVideoId]);
 
-  // Listen for video state
-  // const video = document.querySelector("video");
-  // let isVideoPlaying = $state(false);
-  // let isVideoPaused = $state(false);
-  // video?.addEventListener("playing", (event) => {
-  //   isVideoPlaying = true;
-  //   isVideoPaused = false;
-  // });
-  // video?.addEventListener("pause", (event) => {
-  //   isVideoPlaying = false;
-  //   isVideoPaused = true;
-  // });
+  let hasUnmutedVideoOnce = false;
+  $effect(() => {
+    if (currentVideoEnded) {
+      musicVideoId = Math.floor(Math.random() * musicVideos.length);
+      selectedMusicVideo = musicVideos[musicVideoId];
+    }
+  });
+
+  // Automatically unmute video
+  createOneShot(() => isVideoPlaying && currentVideoMuted, () => {
+    let video = document.querySelector("video");
+      if (video) {
+        // Save people's ears!
+        video.volume = 0.25;
+        video.muted = false;
+        hasUnmutedVideoOnce = true;
+      }
+  });
+
+  // Video play/pause handling
 
   let isVideoPaused: boolean = $state(true);
   let isVideoPlaying: boolean = $derived(!isVideoPaused);
   let currentVideoTime: number = $state(0);
-
-  // Icons
-  import playIcon from "$lib/assets/icons/play.svg";
-  import pauseIcon from "$lib/assets/icons/pause.svg";
-
-  // Components
-  import RollingTimer from "$lib/components/RollingTimer.svelte";
+  let currentVideoEnded: boolean = $state(false);
+  let currentVideoMuted: boolean = $state(true);
 </script>
 
 <svelte:head>
@@ -96,33 +107,34 @@
 
 <div class="root">
   <div class="scene">
-    <video autoplay muted controls controlslist="nodownload" disablepictureinpicture playsinline bind:paused={isVideoPaused} bind:currentTime={currentVideoTime}>
+    <video autoplay controls controlslist="nodownload" disablepictureinpicture playsinline
+      bind:paused={isVideoPaused} bind:currentTime={currentVideoTime} bind:ended={currentVideoEnded} bind:muted={currentVideoMuted}>
       <source src={selectedMusicVideo} type="video/mp4" />
       Your browser does not support loading the video.
     </video>
 
     <div class="osd">
       <div class="osd-row">
-        <span class="osd-play" class:hidden={!isVideoPlaying || !playBlink}>
+        <span class="osd-play text-glow" class:hidden={!isVideoPlaying || !playBlink}>
           <img src={playIcon} alt="" />
           &nbsp;PLAY
         </span>
-        <span class="osd-pause" class:hidden={isVideoPlaying || !playBlink}>
+        <span class="osd-pause text-glow" class:hidden={isVideoPlaying || !playBlink}>
           <img src={pauseIcon} alt="" />
           &nbsp;PAUSE
         </span>
         <!-- <span class="osd-ch">CH&nbsp;&thinsp;01</span> -->
-        <span class="osd-ch">{selectedMusicVideo.substring(selectedMusicVideo.lastIndexOf('/') + 1)}</span>
+        <span class="osd-ch text-glow">{selectedMusicVideo.substring(selectedMusicVideo.lastIndexOf('/') + 1, selectedMusicVideo.lastIndexOf(".mp4") + 4).toUpperCase()}</span>
       </div>
 
       <div class="osd-row">
-        <span class="osd-time">
+        <span class="osd-time text-glow">
           <RollingTimer {currentVideoTime} />
         </span>
       </div>
 
       <div class="osd-row">
-        <span class="osd-sp">SP</span>
+        <span class="osd-sp text-glow">SP</span>
       </div>
     </div>
   </div>
@@ -137,7 +149,7 @@
     height: auto;
     max-width: 100%;
     max-height: 100%;
-    z-index: -100;
+    z-index: 0;
     object-fit: contain;
   }
 </style>

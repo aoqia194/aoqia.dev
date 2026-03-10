@@ -16,6 +16,8 @@ body {
     height: 100vh;
     overflow: hidden;
     background: #000;
+
+    --osd-colour: #ffffff;
 }
 
 /* .scene {
@@ -33,6 +35,7 @@ body {
     height: 0;
     overflow: hidden;
     pointer-events: none;
+    z-index: 10;
 }
 
 /* VHS OSD OVERLAY */
@@ -58,11 +61,11 @@ body {
 /* PLAY and PAUSE (with blinking) */
 .osd-play, .osd-pause {
     font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-    color: #fff;
+    /* color: #fff;
     text-shadow:
         0 0 8px rgba(255, 255, 255, 0.9),
         1px 0 rgba(255, 0, 0, 0.5),
-        -1px 0 rgba(0, 0, 255, 0.5);
+        -1px 0 rgba(0, 0, 255, 0.5); */
     /* transition: opacity 0.05s; */
 }
 .osd-play.hidden, .osd-pause.hidden {
@@ -74,8 +77,8 @@ body {
     font-size: clamp(1.5rem, 3.5vw, 2.5rem);
     /* color: #00eeff;
     text-shadow: 0 0 10px rgba(0, 238, 255, 0.85); */
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
+    /* color: #ffffff; */
+    /* text-shadow: 0 0 10px rgba(255, 255, 255, 0.85); */
 }
 
 .osd-sp {
@@ -83,17 +86,27 @@ body {
     font-size: clamp(1.5rem, 3.5vw, 2.5rem);
     /* color: #ffee00;
     text-shadow: 0 0 9px rgba(255, 238, 0, 0.8); */
-    color: #ffffff;
-    text-shadow: 0 0 9px rgba(255, 255, 255, 0.8);
+    /* color: #ffffff; */
+    /* text-shadow: 0 0 9px rgba(255, 255, 255, 0.8); */
 }
 
 .osd-time {
     margin-left: auto;
     font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-    color: #fff;
+    /* color: #fff; */
     letter-spacing: 0.04em;
-    text-shadow:
+}
+
+.text-glow {
+    color: var(--osd-colour);
+    /* text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.9),
+        1px 0 rgba(255, 0, 0, 0.5),
+        -1px 0 rgba(0, 0, 255, 0.5); */
+    /* text-shadow: 0 0 10px rgba(255, 255, 255, 0.85); */
+    text-shadow: 0px 0px 9px rgba(from var(--osd-colour) r g b / 0.7);
+    /* text-shadow:
         0 0 12px rgba(255, 255, 255, 0.95),
         2px 0 rgba(255, 0, 0, 0.55),
-        -2px 0 rgba(0, 0, 255, 0.55);
+        -2px 0 rgba(0, 0, 255, 0.55); */
 }
