@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, untrack } from "svelte";
 
   // Icons
   import playIcon from "$lib/assets/icons/play.svg";
@@ -23,6 +23,8 @@
 
   // Video selection and rotation
 
+  let videoElement: HTMLVideoElement;
+
   import video_EXPLORERS from "$lib/assets/video/EXPLORERS.mp4";
   import video_LOVEISANOCEAN from "$lib/assets/video/LOVEISANOCEAN.mp4";
   import video_WAVE from "$lib/assets/video/WAVE.mp4";
@@ -34,23 +36,32 @@
   let musicVideoId = Math.floor(Math.random() * musicVideos.length);
   let selectedMusicVideo = $state(musicVideos[musicVideoId]);
 
-  let hasUnmutedVideoOnce = false;
+  // Automatically autoplay video
+  let lastSelectedMusicVideoId = musicVideoId;
   $effect(() => {
     if (currentVideoEnded) {
-      musicVideoId = Math.floor(Math.random() * musicVideos.length);
-      selectedMusicVideo = musicVideos[musicVideoId];
+      untrack(() => {
+        lastSelectedMusicVideoId = musicVideoId;
+        while (musicVideoId == lastSelectedMusicVideoId) {
+          musicVideoId = Math.floor(Math.random() * musicVideos.length);
+        }
+        selectedMusicVideo = musicVideos[musicVideoId];
+        
+        videoElement.querySelector("source")!.src = selectedMusicVideo[1];
+        videoElement.load();
+        videoElement.play();
+      });
     }
   });
-
+  
   // Automatically unmute video
+  let hasUnmutedVideoOnce = false;
   createOneShot(() => isVideoPlaying && currentVideoMuted, () => {
-    let video = document.querySelector("video");
-      if (video) {
-        // Save people's ears!
-        video.volume = 0.25;
-        video.muted = false;
-        hasUnmutedVideoOnce = true;
-      }
+    let video = document.querySelector("video")!;
+    // Save people's ears!
+    video.volume = 0.25;
+    video.muted = false;
+    hasUnmutedVideoOnce = true;
   });
 
   // Video play/pause handling
@@ -107,8 +118,12 @@
 
 <div class="root">
   <div class="scene">
-    <video autoplay controls controlslist="nodownload" disablepictureinpicture playsinline
-      bind:paused={isVideoPaused} bind:currentTime={currentVideoTime} bind:ended={currentVideoEnded} bind:muted={currentVideoMuted}>
+    <video autoplay controls controlslist="nodownload nofullscreen noplaybackrate" disablepictureinpicture playsinline
+      bind:this={videoElement}
+      bind:paused={isVideoPaused}
+      bind:currentTime={currentVideoTime}
+      bind:ended={currentVideoEnded}
+      bind:muted={currentVideoMuted}>
       <source src={selectedMusicVideo[1]} type="video/mp4" />
       Your browser does not support loading the video.
     </video>
