@@ -27,9 +27,9 @@
   import video_LOVEISANOCEAN from "$lib/assets/video/LOVEISANOCEAN.mp4";
   import video_WAVE from "$lib/assets/video/WAVE.mp4";
   const musicVideos = [
-    video_EXPLORERS,
-    video_LOVEISANOCEAN,
-    video_WAVE,
+    ["EXPLORERS.MP4", video_EXPLORERS],
+    ["LOVEISANOCEAN.MP4", video_LOVEISANOCEAN],
+    ["WAVE.MP4", video_WAVE],
   ];
   let musicVideoId = Math.floor(Math.random() * musicVideos.length);
   let selectedMusicVideo = $state(musicVideos[musicVideoId]);
@@ -109,7 +109,7 @@
   <div class="scene">
     <video autoplay controls controlslist="nodownload" disablepictureinpicture playsinline
       bind:paused={isVideoPaused} bind:currentTime={currentVideoTime} bind:ended={currentVideoEnded} bind:muted={currentVideoMuted}>
-      <source src={selectedMusicVideo} type="video/mp4" />
+      <source src={selectedMusicVideo[1]} type="video/mp4" />
       Your browser does not support loading the video.
     </video>
 
@@ -124,7 +124,7 @@
           &nbsp;PAUSE
         </span>
         <!-- <span class="osd-ch">CH&nbsp;&thinsp;01</span> -->
-        <span class="osd-ch text-glow">{selectedMusicVideo.substring(selectedMusicVideo.lastIndexOf('/') + 1, selectedMusicVideo.lastIndexOf(".mp4") + 4).toUpperCase()}</span>
+        <span class="osd-ch text-glow">{selectedMusicVideo[0]}</span>
       </div>
 
       <div class="osd-row">
