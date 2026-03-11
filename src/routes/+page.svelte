@@ -89,7 +89,7 @@
 <svelte:window {onresize} />
 
 <svelte:head>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <!-- <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" /> -->
 </svelte:head>
 
 <svg aria-hidden="true" id="filterbank">
