@@ -17,7 +17,7 @@
     }, 1000);
 
     return () => {
-      clearInterval(blinkTimeout)
+      clearInterval(blinkTimeout);
     };
   });
 
@@ -47,23 +47,26 @@
           musicVideoId = Math.floor(Math.random() * musicVideos.length);
         }
         selectedMusicVideo = musicVideos[musicVideoId];
-        
+
         videoElement.querySelector("source")!.src = selectedMusicVideo[1];
         videoElement.load();
         videoElement.play();
       });
     }
   });
-  
+
   // Automatically unmute video
   let hasUnmutedVideoOnce = false;
-  createOneShot(() => isVideoPlaying && currentVideoMuted, () => {
-    let video = document.querySelector("video")!;
-    // Save people's ears!
-    video.volume = 0.25;
-    video.muted = false;
-    hasUnmutedVideoOnce = true;
-  });
+  createOneShot(
+    () => isVideoPlaying && currentVideoMuted,
+    () => {
+      let video = document.querySelector("video")!;
+      // Save people's ears!
+      video.volume = 0.25;
+      video.muted = false;
+      hasUnmutedVideoOnce = true;
+    },
+  );
 
   // Video play/pause handling
 
@@ -133,7 +136,12 @@
 
 <div class="root">
   <div class="scene">
-    <video autoplay controls controlslist="nodownload nofullscreen noplaybackrate" disablepictureinpicture playsinline
+    <video
+      autoplay
+      controls
+      controlslist="nodownload nofullscreen noplaybackrate"
+      disablepictureinpicture
+      playsinline
       {onloadedmetadata}
       bind:this={videoElement}
       bind:paused={isVideoPaused}
@@ -157,7 +165,7 @@
             PAUSE
           </span>
           <!-- <span class="osd-ch">CH&nbsp;&thinsp;01</span> -->
-          <span class="osd-ch text-glow">{selectedMusicVideo[0]}</span>
+          <span class="osd-ch text-glow">CH {(musicVideoId + 1).toString().padStart(2, "0")}</span>
         </div>
 
         <div class="osd-row">
