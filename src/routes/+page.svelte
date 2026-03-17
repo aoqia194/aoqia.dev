@@ -157,12 +157,12 @@
       <div class="osd">
         <div class="osd-row">
           <span class="osd-play text-glow" class:hidden={!isVideoPlaying || !playBlink}>
-            <img src={playIcon} alt="" class="osd-icon" />
             PLAY
+            <img src={playIcon} alt="" class="osd-icon" />
           </span>
           <span class="osd-pause text-glow" class:hidden={isVideoPlaying || !playBlink}>
-            <img src={pauseIcon} alt="" class="osd-icon" />
             PAUSE
+            <img src={pauseIcon} alt="" class="osd-icon" />
           </span>
           <!-- <span class="osd-ch">CH&nbsp;&thinsp;01</span> -->
           <span class="osd-ch text-glow">CH {(musicVideoId + 1).toString().padStart(2, "0")}</span>

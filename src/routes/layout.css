@@ -75,7 +75,7 @@ body {
     /* transition: opacity 0.05s; */
     position: absolute;
     display: flex;
-    gap: 0.5em;
+    gap: 0.25em;
 }
 .osd-play.hidden, .osd-pause.hidden {
     opacity: 0;
@@ -105,7 +105,9 @@ body {
 }
 
 .osd-icon {
-    height: 1em;
+    margin-top: 0.2em;
+    height: 0.65em;
+    /* height: 1em; */
     width: auto;
     flex-shrink: 0;
 }
