@@ -28,16 +28,21 @@
   import video_EXPLORERS from "$lib/assets/video/EXPLORERS.mp4";
   import video_LOVEISANOCEAN from "$lib/assets/video/LOVEISANOCEAN.mp4";
   import video_WAVE from "$lib/assets/video/WAVE.mp4";
+  import video_AMERICAONLINE from "$lib/assets/video/AMERICAONLINE.mp4";
+  import video_AMERICA2 from "$lib/assets/video/AMERICA2.mp4";
 
   const musicVideos = [
     ["EXPLORERS.MP4", video_EXPLORERS],
     ["LOVEISANOCEAN.MP4", video_LOVEISANOCEAN],
     ["WAVE.MP4", video_WAVE],
+    ["AMERICAONLINE.MP4", video_AMERICAONLINE],
+    ["AMERICA2.MP4", video_AMERICA2],
   ];
-  let musicVideoId = Math.floor(Math.random() * musicVideos.length);
-  let selectedMusicVideo = $state(musicVideos[musicVideoId]);
+  let musicVideoId = $state(Math.floor(Math.random() * musicVideos.length));
+  let selectedMusicVideo = $derived(musicVideos[musicVideoId]);
 
   // Automatically autoplay video
+  // svelte-ignore state_referenced_locally
   let lastSelectedMusicVideoId = musicVideoId;
   $effect(() => {
     if (currentVideoEnded) {
@@ -46,7 +51,7 @@
         while (musicVideoId == lastSelectedMusicVideoId) {
           musicVideoId = Math.floor(Math.random() * musicVideos.length);
         }
-        selectedMusicVideo = musicVideos[musicVideoId];
+        // selectedMusicVideo = musicVideos[musicVideoId];
 
         videoElement.querySelector("source")!.src = selectedMusicVideo[1];
         videoElement.load();
